@@ -3,8 +3,8 @@ import path = require('path');
 import uuid = require('uuid');
 import * as admin from 'firebase-admin';
 import { Bucket } from '@google-cloud/storage';
-import { Firestore, DocumentReference, Timestamp, GeoPoint } from '@google-cloud/firestore';
-import { MetadataResponse, Metadata } from '@google-cloud/common';
+import { Firestore, DocumentReference, Timestamp, GeoPoint } from 'firebase-admin/firestore';
+import { Metadata, MetadataResponse } from '@google-cloud/common'
 
 function fileExist(file: fs.PathLike): boolean {
     try {
@@ -28,7 +28,7 @@ function uploadFile(bucket: Bucket, file: string, destination: string, force?: b
         destination = destination.substring(1);
     }
     // check if the file exists locally.
-    if (fileExist(file) == false) {
+    if (!fileExist(file)) {
         return new Promise((resolve, reject) => {
             reject(new Error("file not found: " + file));
         });
@@ -114,7 +114,7 @@ class ImageSeed {
             }
             var fixedLocalPath = this.localPath.replace(/\{id\}/, docId);
             var fixedRemotePath = this.remotePath.replace(/\{id\}/, docId);
-            if (fileExist(fixedLocalPath) == false) {
+            if (!fileExist(fixedLocalPath)) {
                 reject(new Error("file not found: " + fixedLocalPath));
                 return;
             }
